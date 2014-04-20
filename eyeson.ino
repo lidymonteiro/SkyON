@@ -75,28 +75,31 @@ char c = client.read();
 if(linha_de_entrada.length() < max_linha) {
 linha_de_entrada.concat(c) ; 
 }
-// Se foi recebido um caracter linefeed - LF
-// e a linha está em branco , a requisição http encerrou.
-// Assim é possivel iniciar o envio da resposta
+/*If has received a linefeed character - LF and the line is blank, the http request ended. 
+So it is possible to start sending the response */
+
 if (c == '\n' && current_line_is_blank) {
-// envia uma resposta padrão ao header http recebido
+
+//send a standard response for http header received 
 client.println("HTTP/1.1 200 OK");
 client.println("Content-Type: text/html");
 client.println();
-// começa a enviar o formulário
+
+//starts sending the form 
+
 client.print("<html>") ;
 client.print("<body bgcolor = \"‪#‎FF8800‬\">");
 client.println("<h1><center><font color=\"‪#‎FFFFFF‬\" size=\"10\">SkyON</font></center></h1>");
-client.println("<h3><center><font color=\"#FFFFFF\" size=\"5\">Equipe</font></center></h3><hr/>");
+client.println("<h3><center><font color=\"#FFFFFF\" size=\"5\">Team</font></center></h3><hr/>");
 client.println("Yelken Heckman");
 client.println("Antonio Fernandes");
 client.println("Maria Palloma");
 client.println("Lidiane Monteiro");
 client.println("<hr/>");
 
-client.println("<h3><center><font color=\"#FFFFFF\" size=\"5\">Dados coletados no prototipo</font></center></h3>");
+client.println("<h3><center><font color=\"#FFFFFF\" size=\"5\">Data collected in the prototype</font></center></h3>");
 temperatura = analogRead(0); 
-client.print("<h3> Temperatura: ");
+client.print("<h3> Temperature: ");
 client.print(readTemperature());
 client.print("</h3>");
 digitalWrite(trigPin, LOW);
@@ -110,23 +113,22 @@ client.print("<h3> Altitude: ");
 client.print(distancia);
 client.print("m");
 client.print("</h3>"); 
-client.print("<h3> Vento forte: ");
+client.print("<h3> Strong wind: ");
 client.print(digitalRead(8));
 client.print("</h3>");
 client.print("</h3>"); 
-client.print("<h3> Luminosidade: ");
+client.print("<h3> Luminosity: ");
 client.print(analogRead(1));
 client.print("</h3>");
 // client.println("<br>") ;
 client.println("<hr/>");
-client.println("<h3><center><font color=\"#FFFFFF\" size=\"5\">Controle dos sensores</font></center></h3>");
+client.println("<h3><center><font color=\"#FFFFFF\" size=\"5\">Control of the sensors</font></center></h3>");
 client.println("<br>") ;
 client.println("<h2>SENSOR 1</h2>");
 client.println("<br>") ;
 client.println("<form method=get name=LED>") ;
 client.println("LIGA <input ") ;
-// verifica o status do led e ativa o radio button 
-// correspondente
+/* checks the status of the LED and activates the radio button corresponding */
 if(LEDON) {
 client.println("checked='checked'") ;
 }
@@ -136,16 +138,16 @@ if(!LEDON) {
 client.println("checked='checked'") ;
 }
 client.println("name='LED' value='OFF' type='radio' >");
-// exibe o botão do formulário
-client.println("<br><br><br><hr/> <br><input type=submit value='ATUALIZA'></form>") ;
+// displays the form button
+client.println("<br><br><br><hr/> <br><input type=submit value='UPDATE'></form>") ;
 //Led 2
 client.println("<br>") ;
 client.println("<h2>SENSOR 2</h2>");
 client.println("<br>") ;
 client.println("<form method=get name=LED>") ;
 client.println("LIGA <input ") ;
-// verifica o status do led e ativa o radio button 
-// correspondente
+
+/* checks the status of the LED and activates the radio button corresponding */
 if(LEDON) {
 client.println("checked='checked'") ;
 }
@@ -155,27 +157,30 @@ if(!LEDON) {
 client.println("checked='checked'") ;
 }
 client.println("name='LEDDOIS' value='OFF' type='radio' >");
-// exibe o botão do formulário
-client.println("<br><br><br><hr/> <br><input type=submit value='ATUALIZA'></form>") ;
-// Fim Led 2
+//displays the form button 
+client.println("<br><br><br><hr/> <br><input type=submit value='UPDATE></form>") ;
+// End LED 2
 
 client.println("</body>") ;
 client.println("</html>");
 break;
 }
 if (c == '\n') {
-// se o caracter recebido é um linefeed então estamos começando a receber uma 
-// nova linha de caracteres
-// Analise aqui o conteudo enviado pelo submit
+/*If the received character is a linefeed so we're starting to get a new line character 
+analysis  here the content by submit */
+
 if(linha_de_entrada.indexOf("GET") != -1 ){
-// se a linha recebida contem GET e LED=ON enão guarde o status do led
+
+// If the line contains incoming GET and LED = ON and then save the status LED
+
 if(linha_de_entrada.indexOf("LED=ON") != -1 ){ 
 digitalWrite(ledUmRele, LOW);
 Serial.print('1');
 LEDON=true;
 }
 if(linha_de_entrada.indexOf("LED=OFF") != -1 ){ 
-// se a linha recebida contem GET e LED=OFF enão guarde o status do led
+
+// If the line contains incoming GET and LED = ON and then save the status LED
 digitalWrite(ledUmRele, HIGH);
 Serial.print('0');
 LEDON=false ;
@@ -186,7 +191,7 @@ Serial.print('1');
 LEDON=true;
 }
 if(linha_de_entrada.indexOf("LEDDOIS=OFF") != -1 ){ 
-// se a linha recebida contem GET e LED=OFF enão guarde o status do led
+// If the line contains incoming GET and LED = ON and then save the status LED
 digitalWrite(ledDoisRele, HIGH);
 Serial.print('0');
 LEDON=false ;
@@ -196,13 +201,13 @@ current_line_is_blank = true;
 linha_de_entrada="" ;
 } 
 else if (c != '\r') {
-// recebemos um carater que não é linefeed ou retorno de carro 
-// então recebemos um caracter e a linha de entrada não está mais vazia
+/*received character that is not linefeed or carriage return then we have received a character 
+and the input line is not empty*/
 current_line_is_blank = false;
 }
 }
 }
-// dá um tempo para o browser receber os caracteres
+// give time for the browser receive the characters 
 delay(1);
 client.stop();
 }
