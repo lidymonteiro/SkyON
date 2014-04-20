@@ -2,7 +2,7 @@
     (1) reading equipment of meteorological data, 
     (2) central data processing and data mining, and most importantly, 
     (3) arbitrary community participation.
-    Copyright (C) 2014 Antonio Fernandes, Lidiane Monteiro, Palloma Oliveira, Yelken Ferreira
+    Copyright (C) 2014 Antonio Fernandes, Lidiane Monteiro, Palloma Oliveira, Yelken Heckman
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
